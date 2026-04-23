@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday My Love ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /* Terminal Intro Styles */
+        .terminal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'VT323', monospace;
+        }
+
+        .terminal-overlay.hidden {
+            display: none;
+        }
+
+        .terminal-text {
+            color: #00ff00;
+            font-size: 1.5rem;
+            text-align: left;
+            max-width: 600px;
+            line-height: 1.8;
+            padding: 20px;
+        }
+
+        .terminal-text .cursor {
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .enter-btn {
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            cursor: pointer;
+            display: none;
+            transition: all 0.3s;
+        }
+
+        .enter-btn:hover {
+            background: #00ff00;
+            color: #0a0a0a;
+        }
+
+        /* Secret Password Modal */
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 9000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .password-modal.show {
+            display: flex;
+        }
+
+        .password-box {
+            background: #1a1a2e;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid var(--gold);
+        }
+
+        .password-box h3 {
+            color: var(--gold);
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .password-box input {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border: 2px solid var(--gold);
+            background: #0a0a0a;
+            color: #00ff00;
+            font-family: 'VT323', monospace;
+            width: 200px;
+        }
+
+        .password-box button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background: var(--gold);
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Surprise Messages */
+        .surprise-msg {
+            background: linear-gradient(135deg, var(--coral), var(--purple));
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .surprise-msg:hover {
+            transform: scale(1.02);
+        }
+
+        .surprise-msg .reveal {
+            display: none;
+            color: white;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .surprise-msg.revealed .reveal {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* Quiz Game Modal */
+        .quiz-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 8000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quiz-modal.show {
+            display: flex;
+        }
+
+        .quiz-box {
+            background: linear-gradient(135deg, var(--teal), var(--primary));
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            text-align: center;
+            color: white;
+        }
+
+        .quiz-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-options button {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: white;
+            color: var(--primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .quiz-options button:hover {
+            transform: scale(1.05);
+        }
+
+        .quiz-result {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a237e;
+            --secondary: #3949ab;
+            --accent: #5c6bc0;
+            --light: #e8eaf6;
+            --dark: #0d1642;
+            --text: #37474f;
+            --white: #ffffff;
+            --gold: #c9a227;
+            --coral: #ff6b6b;
+            --teal: #26a69a;
+            --purple: #7e57c2;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 50%, #e8eaf6 100%);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Hide main content until unlocked */
+        body.locked .hero,
+        body.locked .countdown-section,
+        body.locked .gallery-section,
+        body.locked .timeline-section,
+        body.locked .message-section,
+        body.locked footer {
+            display: none;
+        }
+
+        body.unlocked .hero,
+        body.unlocked .countdown-section,
+        body.unlocked .gallery-section,
+        body.unlocked .timeline-section,
+        body.unlocked .message-section,
+        body.unlocked footer {
+            display: block;
+        }
+
+        /* Floating Hearts Animation */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-100px) rotate(10deg);
+                opacity: 0.3;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #303f9f 100%);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: white;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: var(--gold);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            max-width: 600px;
+            line-height: 1.8;
+            margin: 0 auto 2rem;
+            animation: fadeInUp 1s ease-out 0.4s both;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .couple-photo {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .couple-photo img {
+            width: 300px;
+            height: auto;
+            border: 4px solid var(--gold);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Countdown Section - Coral */
+        .countdown-section {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(180deg, #283593 0%, #ff6b6b 100%);
+        }
+
+        .countdown-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            min-width: 100px;
+            border: 3px solid var(--coral);
+        }
+
+        .countdown-item .number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--coral);
+            font-weight: 700;
+        }
+
+        .countdown-item .label {
+            font-size: 0.9rem;
+            color: var(--text);
+            margin-top: 0.5rem;
+        }
+
+        /* Wedding Countdown - Teal */
+        .wedding-countdown {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #26a69a 0%, #00897b 100%);
+            border-radius: 20px;
+            color: white;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 3px solid #80cbc4;
+        }
+
+        .wedding-countdown h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .wedding-countdown .wedding-timer {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .wedding-countdown .wedding-item {
+            text-align: center;
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            border-radius: 15px;
+            min-width: 80px;
+        }
+
+        .wedding-countdown .wedding-item .number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .wedding-countdown .wedding-item .label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        /* Gallery Section - Purple */
+        .gallery-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #7e57c2 0%, #5e35b1 100%);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: white;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            aspect-ratio: 1;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            border: 4px solid var(--gold);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(126, 87, 194, 0.9));
+            padding: 2rem 1rem 1rem;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .overlay {
+            opacity: 1;
+        }
+
+        /* Timeline Section - Light Blue */
+        .timeline-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+        }
+
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--coral), var(--teal), var(--purple));
+            border-radius: 4px;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: calc(50% + 30px);
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: calc(50% + 30px);
+        }
+
+        .timeline-item::before {
+            content: '💙';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .timeline-item:nth-child(3n+1)::before { content: '💙'; }
+        .timeline-item:nth-child(3n+2)::before { content: '💕'; }
+        .timeline-item:nth-child(3n)::before { content: '💖'; }
+
+        .timeline-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(26, 35, 126, 0.15);
+            max-width: 350px;
+            text-align: right;
+            border: 3px solid var(--primary);
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            text-align: left;
+        }
+
+        .timeline-item:nth-child(4n+2) .timeline-content { border-color: var(--coral); }
+        .timeline-item:nth-child(4n+3) .timeline-content { border-color: var(--teal); }
+        .timeline-item:nth-child(4n) .timeline-content { border-color: var(--purple); }
+
+        .timeline-content h3 {
+            color: var(--primary);
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content .date {
+            color: var(--coral);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Message Section - Dark Blue */
+        .message-section {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #1a237e 0%, #0d1642 100%);
+            color: white;
+        }
+
+        .message-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--gold);
+        }
+
+        .message-section p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Footer - Teal */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #26a69a 0%, #00796b 100%);
+            color: white;
+        }
+
+        footer p {
+            font-size: 1.1rem;
+        }
+
+        footer .heart-icon {
+            color: var(--gold);
+            font-size: 1.5rem;
+            animation: heartbeat 1s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                padding-left: 60px;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+
+            .timeline-item::before {
+                left: 20px;
+            }
+
+            .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                text-align: left;
+                max-width: 100%;
+            }
+
+            .countdown {
+                gap: 1rem;
+            }
+
+            .countdown-item {
+                min-width: 80px;
+                padding: 1rem;
+            }
+
+            .countdown-item .number {
+                font-size: 2rem;
+            }
+
+            .couple-photo {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .couple-photo img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            border: 4px solid var(--gold);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Terminal Intro (Commented out)-->
+    <div class="terminal-overlay" id="terminalOverlay">
+        <div class="terminal-text" id="terminalText"></div>
+        <button class="enter-btn" id="enterBtn" onclick="enterSite()">[ ENTER ]</button>
+    </div> 
+
+    <!-- Secret Password Modal (Commented out)-->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-box">
+            <h3>🔐 ENTER SECRET PASSWORD</h3>
+            <input type="password" id="passwordInput" placeholder="Password...">
+            <button onclick="checkPassword()">UNLOCK</button>
+            <p id="passwordError" style="color: red; margin-top: 10px; display: none;">Wrong password!</p>
+        </div>
+    </div> 
+
+    <!-- Quiz Game Modal (Commented out)-->
+    <div class="quiz-modal" id="quizModal">
+        <div class="quiz-box">
+            <h3>🎮 Birthday Quiz Time!</h3>
+            <p id="quizQuestion">What month has been special for us?</p>
+            <div class="quiz-options" id="quizOptions">
+                <button onclick="answerQuiz('April')">April</button>
+                <button onclick="answerQuiz('May')">May</button>
+                <button onclick="answerQuiz('June')">June</button>
+            </div>
+            <div class="quiz-result" id="quizResult">
+                🎉 CORRECT! Happy Birthday my love! 🎂
+            </div>
+        </div>
+    </div> 
+
+    <!-- Floating Hearts -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- Hero Section - Dark Blue -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Happy Birthday My Love! 🎂</h1>
+            <h2>My Future Husband</h2>
+            <p>
+                Today you turn 27, my love! 🎉<br><br>
+                From that crazy night at OMG and Insomnia in Grand Baie, Mauritius — 
+                when we both were drunk and had a night stand — to the moment you proposed 
+                under the full moon on May 3rd, 2023... every moment with you has been magical.
+                <br><br>
+                In just 2 months, I'll become your wife. I can't wait to spend forever with you! 💍
+            </p>
+            <div class="couple-photo">
+                <img src="./images/kiss_small.jpg" alt="ME" style="border: 3px solid red; width: 300px; height: 300px; object-fit: cover; border-radius: 50%; transform: rotate(-90deg);">
+                <img src="./images/kissF.jpg" alt="ME" style="border: 3px solid red; width: 300px; height: 300px; object-fit: cover; border-radius: 50%;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Countdown Section - Coral -->
+    <section class="countdown-section">
+        <h2>Counting Down to Your Special Day! ⏰</h2>
+        <div class="countdown" id="countdown">
+            <div class="countdown-item">
+                <div class="number" id="days">00</div>
+                <div class="label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="number" id="hours">00</div>
+                <div class="label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="number" id="minutes">00</div>
+                <div class="label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <div class="number" id="seconds">00</div>
+                <div class="label">Seconds</div>
+            </div>
+        </div>
+
+        <div class="wedding-countdown">
+            <h3>💍 Our Wedding Countdown 💍</h3>
+            <p style="margin-bottom: 1rem; opacity: 0.9;">June 27, 2026</p>
+            <div class="wedding-timer" id="weddingTimer">
+                <div class="wedding-item">
+                    <div class="number" id="weddingDays">00</div>
+                    <div class="label">Days</div>
+                </div>
+                <div class="wedding-item">
+                    <div class="number" id="weddingHours">00</div>
+                    <div class="label">Hours</div>
+                </div>
+                <div class="wedding-item">
+                    <div class="number" id="weddingMinutes">00</div>
+                    <div class="label">Minutes</div>
+                </div>
+                <div class="wedding-item">
+                    <div class="number" id="weddingSeconds">00</div>
+                    <div class="label">Seconds</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section - Purple -->
+    <section class="gallery-section">
+        <h2 class="section-title">Our Memories 📸</h2>
+        <div class="gallery">
+            
+            <div class="gallery-item">
+                <img src="./images/firstpic.jpeg" alt="First Pic 23rd april 2023">
+                <div class="overlay">First Pic 23rd april 2023 📸</div>
+            </div>
+            <div class="gallery-item">
+                <img src="./images/proposal1.jpeg" alt="Proposal">
+                <div class="overlay">Proposal - May 3, 2023 💍</div>
+            </div>
+
+            <div class="gallery-item">
+                <img src="./images/dateF2.jpeg" alt="Official Date">
+                <div class="overlay">Official Date- May 4, 2023</div>
+            </div>
+            
+            <div class="gallery-item">
+                <img src="./images/graduation.jpeg" alt="Graduation">
+                <div class="overlay">First met my parents (AUG 2023) </div>
+            </div>
+
+                <div class="gallery-item">
+                <img src="./images/engagement.jpeg" alt="Engagement">
+                <div class="overlay">Engagement - May 12, 2024 💕</div>
+            </div>
+
+            <div class="gallery-item">
+                <img src="./images/longdistance.jpeg" alt="LD">
+                <div class="overlay">Long Distance (Sept 2024 - June 2025)</div>
+            </div>
+
+             <div class="gallery-item">
+                <img src="./images/reunionEU.jpg" alt="Paris">
+                <div class="overlay">Reunion (June 2025)</div>
+            </div>
+
+            <div class="gallery-item">
+                <img src="./images/paris_kiss.jpg" alt="Paris">
+                <div class="overlay">PARIS</div>
+            </div>
+            <div class="gallery-item">
+                <img src="./images/southF.jpg" alt="Cote D'Azur">
+                <div class="overlay"> South of France </div>
+            </div>
+            <div class="gallery-item">
+                <img src="./images/monaco.jpg" alt="Monaco">
+                <div class="overlay">Monaco</div>
+            </div>
+             <div class="gallery-item">
+                <img src="./images/italy.jpg" alt="Italy">
+                <div class="overlay">Italy</div>
+            </div>
+
+            <div class="gallery-item">
+                <img src="./images/LDBack.jpg" alt="Back to LD">
+                <div class="overlay">Back to Long Distace (July 2025)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section - Light Blue -->
+    <section class="timeline-section">
+        <h2 class="section-title">Our Love Story 💙</h2>
+
+
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>First Meeting</h3>
+                    <div class="date">April 23, 2023</div>
+                    <p>You Remember our first meeting right? Both drunk, then club-hopping from OMG to Insomnia. Not me taking this as one night stand! OUR FIRST SEX that changed everything. FIRST AND THE BEST!! What a night! 😄</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Your 24th Birthday</h3>
+                    <div class="date">April 25, 2023</div>
+                    <p>You remember, you wanted me to wish you at midnight after just 2 days of knowing. I didnt do so, you kept on bringing that midnight wish topic each time. But FUNNY thing, you still chose me!</p>
+                </div>
+            </div>
+           
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Proposal</h3>
+                    <div class="date">May 3, 2023 at 11:20 PM</div>
+                    <p>You FUCKING proposed me to be your girlfriend at MT Choisy, with a beautiful full moon view. I was definitely not ready BUT i kept telling myself i would be the dumbest girl ever to refuse this proposal. BUT BABE, you were so sure since DAY1. DAMN! Not gonna lie, this was the Best moment of my life! 🌕💍</p>
+                </div>
+            </div>
+             <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Meeting My Parents</h3>
+                    <div class="date">August 2023</div>
+                    <p>You were so nervous to meet my parents for the first time at my graduation ceremony! And i waited for you for my photoshoot but your car broke down. Nevermind, i still love you! </p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Engagement</h3>
+                    <div class="date">May 12, 2024</div>
+                    <p> We got engaged after 1 year of dating! Now, that was not planned, HAHA. Another step closer to forever together. 💕</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Long Distance Begins</h3>
+                    <div class="date">September 13, 2023</div>
+                    <p>The beginning of our long distance journey...</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>I Moved to Canada</h3>
+                    <div class="date">January 2025</div>
+                    <p>I moved to Canada. Distance tested us, but our love only grew stronger! 🇨🇦</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Paris Reunion</h3>
+                    <div class="date">June 2025</div>
+                    <p>We reunited in Paris,The city of love!💕, After 9 months apart! </p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Europe Adventure</h3>
+                    <div class="date">June - July 2025</div>
+                    <p>We fucking did a europe trip in our 20's babe. From all of paris, to south of france, to monaco, to italy, back to monaco, back to south of france and finally back to PARIS. THAT WAS SO UNEXPECTED, and we didnt plan that either. That's why iloveyousomuchhhhh </p>
+                </div>
+            </div>
+            
+        
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Back to Long Distance</h3>
+                    <div class="date">July 24, 2025</div>
+                    <p>Back to long distance again. But we knew it was temporary...</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Another Cruise</h3>
+                    <div class="date">September 15, 2025</div>
+                    <p>And you went on another cruise. Missing you every single day! 🚢</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Coming Home</h3>
+                    <div class="date">May 14, 2026</div>
+                    <p>You will be back HOME!! Just one month before our wedding! 🎉</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Going to Mauritius</h3>
+                    <div class="date">June 14, 2026</div>
+                    <p>OUR REUNION after nearly a year apart! 💕</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>💍 OUR WEDDING 💍</h3>
+                    <div class="date">June 27, 2026</div>
+                    <p>The day I will become YOUR WIFE OFFICIALLY! I can't wait to marry you, my forever person! 👰🤵💕</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Message Section - Dark Blue -->
+    <section class="message-section">
+        <h2>A Message Just For You 💌</h2>
+        
+        <!-- Surprise Message 1 -->
+        <div class="surprise-msg" onclick="this.classList.toggle('revealed')">
+            <h3 style="color: var(--gold);">💝 Click to reveal secret #1</h3>
+            <div class="reveal">
+                <p>From tasting your dick for the first time to being committed and addicted to it till now. I can still visualise how heavenly you always make me feel.</p>
+            </div>
+        </div>
+        
+        <!-- Surprise Message 2 -->
+        <div class="surprise-msg" onclick="this.classList.toggle('revealed')">
+            <h3 style="color: var(--gold);">💝 Click to reveal secret #2</h3>
+            <div class="reveal">
+                <p> To be honest, even if god would have tell me the very first day we met, that i just met my future husband, i would never have believed. I dont know what happened, but something beautiful happened that day. AND, I fell madly in love with you at the most unexpected moment in my life. I love how your brown shiny eyes look at me when you're between my legs, how you smile with my nonsense stuff. We just fell in love with each other. Not knowing when and how, it just happened. And i am so grateful. </p>
+            </div>
+        </div>
+        
+        <!-- Surprise Message 3 -->
+        <div class="surprise-msg" onclick="this.classList.toggle('revealed')">
+            <h3 style="color: var(--gold);">💝 Click to reveal secret #3</h3>
+            <div class="reveal">
+                <p>I love you more than words can express. You are the missing piece I never knew I was looking for. I always admire you whenever you pamper me, make love out of nowhere, keeps on proving how much i mean to you.</p>
+            </div>
+        </div>
+        
+        <p style="margin-top: 2rem;">
+            My love, on this special day, I want you that you mean the world to me. 
+            You are my everything. From that crazy night at OMG till today
+            every moment with you has been a blessing. Distance may have kept us apart, but it only made our love stronger.
+            It's been such a challenging 2 years for you. But it's all worth it because we have each other. I am so proud of you for everything you've achieved and how hard you've worked. I am so lucky to have you in my life.
+            <br><br>
+            In just 2 months, I'll become your wife. I promise to love you more with each 
+            passing day. You are my forever and always. 
+            No matter what life throws at us, I know we can get through it together. I can't wait to spend forever with you! 💍💕
+            <br><br>
+            <strong style="color: var(--gold);">Happy 27th Birthday, my future husband! 🎂💙</strong>
+        </p>
+    </section>
+
+    <!-- Footer - Teal -->
+    <footer>
+        <p>Made with <span class="heart-icon">❤️</span> just for you</p>
+        <p style="margin-top: 1rem; opacity: 0.8;">© 2026 Your Future Wife</p>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="Enlarged image" id="lightboxImg">
+    </div>
+
+    <script>
+        // Lock the site initially (Commented out)
+        document.body.classList.add('locked');
+        
+        // Terminal typing effect (Commented out)
+        
+        const terminalMessages = [
+            "Initializing secure connection...",
+            "Bypassing firewall...",
+            "Accessing encrypted files...",
+            "Decrypting birthday protocol...",
+            "Loading love.exe...",
+            "System ready. Welcome, Sneha's betterhalf! 💕"
+        ];
+        
+        let messageIndex = 0;
+        let charIndex = 0;
+        const terminalText = document.getElementById('terminalText');
+        const enterBtn = document.getElementById('enterBtn');
+        
+        function typeText() {
+            if (messageIndex < terminalMessages.length) {
+                const currentMsg = terminalMessages[messageIndex];
+                if (charIndex === 0) {
+                    terminalText.innerHTML += '<span class="cursor">_</span><br>';
+                }
+                
+                if (charIndex < currentMsg.length) {
+                    // Insert character at cursor position
+                    const cursorHtml = '<span class="cursor">_</span>';
+                    terminalText.innerHTML = terminalText.innerHTML.replace(cursorHtml, currentMsg[charIndex] + cursorHtml);
+                    charIndex++;
+                    setTimeout(typeText, 50);
+                } else {
+                    messageIndex++;
+                    charIndex = 0;
+                    setTimeout(typeText, 300);
+                }
+            } else {
+                enterBtn.style.display = 'block';
+            }
+        }
+        
+        // Start terminal on load
+        window.onload = function() {
+            typeText();
+        };
+        
+        function enterSite() {
+            document.getElementById('terminalOverlay').classList.add('hidden');
+            // Show password modal after entering
+            setTimeout(() => {
+                document.getElementById('passwordModal').classList.add('show');
+            }, 500);
+        }
+        
+        // Password check (default password: love)
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value.toLowerCase();
+            const errorMsg = document.getElementById('passwordError');
+            
+            if (input === 'love' || input === 'sneha' || input === 'seeboruth') {
+                document.getElementById('passwordModal').classList.remove('show');
+                // Show quiz after password
+                setTimeout(() => {
+                    document.getElementById('quizModal').classList.add('show');
+                }, 500);
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+        
+        // Quiz game
+        function answerQuiz(answer) {
+            const result = document.getElementById('quizResult');
+            const options = document.getElementById('quizOptions');
+            
+            if (answer === 'May') {
+                result.style.display = 'block';
+                options.style.display = 'none';
+                // Unlock the site after quiz
+                setTimeout(() => {
+                    document.getElementById('quizModal').classList.remove('show');
+                    document.body.classList.remove('locked');
+                    document.body.classList.add('unlocked');
+                }, 2000);
+            } else {
+                alert('Try again! 😊');
+            }
+        }
+        
+
+        // Create floating hearts with different colors
+        function createHearts() {
+            const container = document.getElementById('heartsContainer');
+            const hearts = [
+                { emoji: '💙', color: '#1a237e'},
+                { emoji: '💕', color: '#ff6b6b'},
+                { emoji: '💖', color: '#7e57c2'},
+                { emoji: '💗', color: '#26a69a'},
+                { emoji: '💘', color: '#c9a227'},
+                { emoji: '💝', color: '#e91e63'},
+                { emoji: '💍', color: '#c9a227'},
+                { emoji: '🎉', color: '#ff6b6b'}
+            ];
+            
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                const randomHeart = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.textContent = randomHeart.emoji;
+                heart.style.color = randomHeart.color;
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 6 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                container.appendChild(heart);
+            }
+        }
+
+        // Birthday Countdown - April 25, 2026
+        function startBirthdayCountdown() {
+            const birthday = new Date('2026-04-25T00:00:00');
+            
+            function updateCountdown() {
+                const now = new Date();
+                const diff = birthday - now;
+                
+                if (diff > 0) {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    
+                    document.getElementById('days').textContent = String(days).padStart(2, '0');
+                    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+                } else {
+                    document.getElementById('days').textContent = '00';
+                    document.getElementById('hours').textContent = '00';
+                    document.getElementById('minutes').textContent = '00';
+                    document.getElementById('seconds').textContent = '00';
+                }
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // Wedding Countdown - June 27, 2026
+        function startWeddingCountdown() {
+            const wedding = new Date('2026-06-27T00:00:00');
+            
+            function updateWeddingCountdown() {
+                const now = new Date();
+                const diff = wedding - now;
+                
+                if (diff > 0) {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    
+                    document.getElementById('weddingDays').textContent = String(days).padStart(2, '0');
+                    document.getElementById('weddingHours').textContent = String(hours).padStart(2, '0');
+                    document.getElementById('weddingMinutes').textContent = String(minutes).padStart(2, '0');
+                    document.getElementById('weddingSeconds').textContent = String(seconds).padStart(2, '0');
+                }
+            }
+            
+            updateWeddingCountdown();
+            setInterval(updateWeddingCountdown, 1000);
+        }
+
+        // Lightbox functionality
+        function setupLightbox() {
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            const lightboxClose = document.querySelector('.lightbox-close');
+            
+            galleryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const img = item.querySelector('img');
+                    lightboxImg.src = img.src;
+                    lightbox.classList.add('active');
+                });
+            });
+            
+            lightbox.addEventListener('click', () => {
+                lightbox.classList.remove('active');
+            });
+            
+            lightboxClose.addEventListener('click', (e) => {
+                e.stopPropagation();
+                lightbox.classList.remove('active');
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createHearts();
+            startBirthdayCountdown();
+            startWeddingCountdown();
+            setupLightbox();
+        });
+    </script>
+</body>
+</html>
+
